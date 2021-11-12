@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState, useRef } from "react";
+import Header from "./components/Header";
+import Input from "./components/Input";
+import { StyledButton, StyledDiv, StyledText } from "./styles/styles";
+import { makePassword } from "./assets/helpers/makePassword";
 function App() {
+  const [digits, setDigits] = useState();
+  const [password, setPassword] = useState("");
+  const refPassword = useRef(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div
+      style={{
+        width: "500px",
+        height: "300px",
+      }}
+    >
+      <Header title="Password Generator" />
+      <StyledDiv margin="20px" justifyContent="center">
+        <Input
+          type="number"
+          min="1"
+          placeholder="Password length"
+          onChange={(e) => setDigits(e.target.value)}
+        />
+        <StyledButton onClick={() => setPassword(makePassword(digits))}>
+          <StyledText color="white" fontSize="1em">
+            Generate
+          </StyledText>
+        </StyledButton>
+      </StyledDiv>
+      <StyledDiv justifyContent="center">
+        <Input ref={refPassword} value={password} disabled width="200px" />
+        <StyledButton
+          color="white"
+          fontSize="1em"
+          onClick={() => {
+            navigator.clipboard.writeText(password);
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Copy
+        </StyledButton>
+      </StyledDiv>
     </div>
   );
 }
